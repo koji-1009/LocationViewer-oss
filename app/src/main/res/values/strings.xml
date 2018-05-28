@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name" translatable="false">Location Viewer</string>
+
+    <string name="menu_get_location">Get location</string>
+    <string name="require_location_permission">This application requires location permission</string>
+
+    <string name="notification_title">Where am I ?</string>
+    <string name="hint_latitude">Latitude</string>
+    <string name="hint_longitude">Longitude</string>
+    <string name="tb_update_address_button" translatable="false">Update address button</string>
+
+    <string name="full_address" translatable="false">Full Address</string>
+    <string name="country_code" translatable="false">Country code</string>
+    <string name="country_name" translatable="false">Country name</string>
+    <string name="feature_name" translatable="false">Feature name</string>
+    <string name="admin_area" translatable="false">Admin area</string>
+    <string name="sub_admin_area" translatable="false">Sub admin area</string>
+    <string name="locality" translatable="false">Locality</string>
+    <string name="sub_locality" translatable="false">Sub Locality</string>
+    <string name="thoroughfare" translatable="false">Thoroughfare</string>
+    <string name="sub_thoroughfare" translatable="false">Sub thoroughfare</string>
+    <string name="premises" translatable="false">Premises</string>
+    <string name="postal_code" translatable="false">Postal code</string>
+
+</resources>

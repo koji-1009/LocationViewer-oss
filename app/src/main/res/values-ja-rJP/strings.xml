@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="require_location_permission">このアプリは位置情報の権限が必要です</string>
+    <string name="menu_get_location">現在地取得</string>
+    <string name="notification_title">現在地</string>
+    <string name="hint_latitude">緯度</string>
+    <string name="hint_longitude">経度</string>
+</resources>
