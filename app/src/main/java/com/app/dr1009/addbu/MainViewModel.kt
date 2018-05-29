@@ -31,6 +31,8 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
+import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 import java.io.IOException
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -65,26 +67,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateAddress() {
-        val calcLat = if (isSouth) {
-            -1
-        } else {
-            1
-        } * latitude.get()!!.toDouble()
-        val calcLon = if (isWest) {
-            -1
-        } else {
-            1
-        } * longitude.get()!!.toDouble()
+        Completable
+                .create {
+                    val calcLat = if (isSouth) {
+                        -1
+                    } else {
+                        1
+                    } * latitude.get()!!.toDouble()
+                    val calcLon = if (isWest) {
+                        -1
+                    } else {
+                        1
+                    } * longitude.get()!!.toDouble()
 
-        try {
-            val list = Geocoder(getApplication()).getFromLocation(calcLat, calcLon, 1)
-            address.postValue(if (list.isEmpty()) {
-                null
-            } else {
-                list.first()
-            })
-        } catch (e: IOException) {
-            Log.e("MainViewModel", "updateAddress: ", e)
-        }
+                    try {
+                        val list = Geocoder(getApplication()).getFromLocation(calcLat, calcLon, 1)
+                        address.postValue(if (list.isEmpty()) {
+                            null
+                        } else {
+                            list.first()
+                        })
+                    } catch (e: IOException) {
+                        Log.e("MainViewModel", "updateAddress: ", e)
+                    }
+                }
+                .observeOn(Schedulers.computation())
+                .subscribe()
+
     }
 }
