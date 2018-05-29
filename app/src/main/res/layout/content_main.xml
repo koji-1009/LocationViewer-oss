@@ -14,6 +14,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="com.app.dr1009.addbu.MainActivity"
         tools:showIn="@layout/activity_main">
@@ -22,18 +24,18 @@
             android:id="@+id/lat_text_input_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toStartOf="@+id/lon_text_input_layout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toTopOf="parent">
 
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_latitude"
                 android:inputType="numberDecimal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:singleLine="true"
                 android:text="@={viewModel.latitude}" />
         </android.support.design.widget.TextInputLayout>
@@ -43,7 +45,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/lat_text_input_layout"
             app:layout_constraintEnd_toStartOf="@+id/update_button"
             app:layout_constraintStart_toEndOf="@+id/lat_text_input_layout"
@@ -55,6 +56,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_longitude"
                 android:inputType="numberDecimal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:singleLine="true"
                 android:text="@={viewModel.longitude}" />
         </android.support.design.widget.TextInputLayout>
@@ -64,34 +67,44 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:contentDescription="@string/tb_update_address_button"
             android:onClick="@{() -> viewModel.updateAddress()}"
-            app:layout_constraintBottom_toBottomOf="@+id/lat_text_input_layout"
+            app:layout_constraintBottom_toBottomOf="@+id/spinner_lat"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/lon_text_input_layout"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintTop_toTopOf="@+id/lon_text_input_layout"
             app:srcCompat="@drawable/ic_refresh_black_24dp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:orientation="vertical"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lat_text_input_layout"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_lat"
             tools:listitem="@layout/list_item_main" />
+
+        <Spinner
+            android:id="@+id/spinner_lat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/lat_text_input_layout"
+            app:layout_constraintStart_toStartOf="@+id/lat_text_input_layout"
+            app:layout_constraintTop_toBottomOf="@+id/lat_text_input_layout" />
+
+        <Spinner
+            android:id="@+id/spinner_lon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/lon_text_input_layout"
+            app:layout_constraintStart_toStartOf="@+id/lon_text_input_layout"
+            app:layout_constraintTop_toBottomOf="@+id/lon_text_input_layout" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="lat_array">
+        <item>North</item>
+        <item>South</item>
+    </string-array>
+    <string-array name="lon_array">
+        <item>East</item>
+        <item>West</item>
+    </string-array>
+</resources>

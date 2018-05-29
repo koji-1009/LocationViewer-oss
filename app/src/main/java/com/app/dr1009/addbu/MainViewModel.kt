@@ -30,15 +30,18 @@ import android.databinding.ObservableField
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.util.Log
+import java.io.IOException
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
+
+    var isSouth = false
+    var isWest = false
 
     var latitude = ObservableField("0.0")
         set (value) {
             var tmp = value.get()?.toDoubleOrNull() ?: 0.0
-            if (tmp < -90.0) {
-                tmp = -90.0
-            } else if (tmp > 90.0) {
+            if (tmp > 90.0) {
                 tmp = 90.0
             }
 
@@ -47,9 +50,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     var longitude = ObservableField("0.0")
         set(value) {
             var tmp = value.get()?.toDoubleOrNull() ?: 0.0
-            if (tmp < -180.0) {
-                tmp = -180.0
-            } else if (tmp > 180.0) {
+            if (tmp > 180.0) {
                 tmp = 180.0
             }
 
@@ -64,11 +65,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateAddress() {
-        val list = Geocoder(getApplication()).getFromLocation(latitude.get()!!.toDouble(), longitude.get()!!.toDouble(), 1)
-        address.postValue(if (list.isEmpty()) {
-            null
+        val calcLat = if (isSouth) {
+            -1
         } else {
-            list.first()
-        })
+            1
+        } * latitude.get()!!.toDouble()
+        val calcLon = if (isWest) {
+            -1
+        } else {
+            1
+        } * longitude.get()!!.toDouble()
+
+        try {
+            val list = Geocoder(getApplication()).getFromLocation(calcLat, calcLon, 1)
+            address.postValue(if (list.isEmpty()) {
+                null
+            } else {
+                list.first()
+            })
+        } catch (e: IOException) {
+            Log.e("MainViewModel", "updateAddress: ", e)
+        }
     }
 }
