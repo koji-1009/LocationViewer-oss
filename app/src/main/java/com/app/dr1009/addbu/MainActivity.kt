@@ -29,20 +29,15 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.databinding.DataBindingUtil
-import android.location.Location
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import com.app.dr1009.addbu.databinding.ActivityMainBinding
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import io.reactivex.Single
+import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnShowRationale
@@ -67,32 +62,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        binding.mainContent.let {
-            it.recycler.adapter = adapter
-            val latAdapter = ArrayAdapter.createFromResource(applicationContext, R.array.lat_array, android.R.layout.simple_spinner_item)
-            latAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            it.spinnerLat.adapter = latAdapter
-            it.spinnerLat.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
-
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    viewModel.isSouth = position == 1
-                }
-            }
-
-            val lonAdapter = ArrayAdapter.createFromResource(applicationContext, R.array.lon_array, android.R.layout.simple_spinner_item)
-            lonAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            it.spinnerLon.adapter = lonAdapter
-            it.spinnerLon.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
-
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    viewModel.isWest = position == 1
-                }
-            }
-        }
+        binding.mainContent.recycler.adapter = adapter
 
         viewModel.address.observe(this, Observer {
             adapter.setAddress(applicationContext, it)
@@ -119,12 +89,14 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingPermission")
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     fun fetchLocation() {
-        LocationServices.getFusedLocationProviderClient(this@MainActivity).run {
-            Single
-                    .create<Location> { lastLocation.addOnSuccessListener(it::onSuccess).addOnFailureListener(it::onError) }
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(viewModel::updateLocation, { Log.e("MainActivity", "fetchLocation: ", it) })
-        }
+        Completable
+                .create {
+                    LocationServices.getFusedLocationProviderClient(this@MainActivity).run {
+                        lastLocation.addOnSuccessListener(viewModel::updateLocation)
+                    }
+                }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
     }
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
