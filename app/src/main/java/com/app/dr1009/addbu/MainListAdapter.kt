@@ -101,8 +101,7 @@ class MainListAdapter : ListAdapter<MainListAdapter.Item, MainListAdapter.ViewHo
         private val binding: ViewDataBinding? = DataBindingUtil.bind(view)
         fun bindTo(item: Item) {
             binding?.run {
-                setVariable(BR.title, item.title)
-                setVariable(BR.text, item.text)
+                setVariable(BR.item, item)
                 executePendingBindings()
             }
         }
