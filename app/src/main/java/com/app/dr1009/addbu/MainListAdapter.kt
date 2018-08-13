@@ -24,12 +24,12 @@ THE SOFTWARE.
 package com.app.dr1009.addbu
 
 import android.content.Context
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import android.location.Address
-import android.support.v7.recyclerview.extensions.ListAdapter
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,8 +38,8 @@ class MainListAdapter : ListAdapter<MainListAdapter.Item, MainListAdapter.ViewHo
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Item>() {
-            override fun areItemsTheSame(oldItem: Item?, newItem: Item?) = oldItem == newItem
-            override fun areContentsTheSame(oldItem: Item?, newItem: Item?) = oldItem == newItem
+            override fun areItemsTheSame(oldItem: Item, newItem: Item) = oldItem == newItem
+            override fun areContentsTheSame(oldItem: Item, newItem: Item) = oldItem == newItem
         }
     }
 
@@ -96,7 +96,7 @@ class MainListAdapter : ListAdapter<MainListAdapter.Item, MainListAdapter.ViewHo
         submitList(list)
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
 
         private val binding: ViewDataBinding? = DataBindingUtil.bind(view)
         fun bindTo(item: Item) {
