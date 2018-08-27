@@ -79,6 +79,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         })
                     } catch (e: IOException) {
                         Log.e("MainViewModel", "updateAddress: ", e)
+                    } finally {
+                        it.onComplete()
                     }
                 }
                 .observeOn(Schedulers.computation())

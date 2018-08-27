@@ -47,7 +47,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-oss-licenses:16.0.0'
 
     implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
 
     def permissionDispatcher = '4.0.0-alpha1'
     implementation"com.github.hotchemi:permissionsdispatcher:$permissionDispatcher"

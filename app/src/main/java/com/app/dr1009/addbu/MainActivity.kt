@@ -25,19 +25,23 @@ package com.app.dr1009.addbu
 
 import android.Manifest
 import android.annotation.SuppressLint
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
+import android.location.Location
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.app.dr1009.addbu.databinding.ActivityMainBinding
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import io.reactivex.Completable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnShowRationale
@@ -55,18 +59,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private val adapter = MainListAdapter()
+    private var mDisposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setSupportActionBar(binding.toolbar)
 
+        val adapter = MainListAdapter()
         binding.mainContent.recycler.adapter = adapter
 
         viewModel.address.observe(this, Observer {
             adapter.setAddress(applicationContext, it)
         })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (mDisposable?.isDisposed == false) {
+            mDisposable?.dispose()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -89,14 +101,33 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingPermission")
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     fun fetchLocation() {
-        Completable
-                .create {
-                    LocationServices.getFusedLocationProviderClient(this@MainActivity).run {
-                        lastLocation.addOnSuccessListener(viewModel::updateLocation)
-                    }
+        if (mDisposable?.isDisposed == false) {
+            mDisposable?.dispose()
+        }
+
+        mDisposable = Single
+                .create<Location> { emitter ->
+                    LocationServices.getFusedLocationProviderClient(this@MainActivity)
+                            .run {
+                                lastLocation.addOnCompleteListener {
+                                    val result = it.result
+                                    if (result != null) {
+                                        emitter.onSuccess(result)
+                                    } else {
+                                        emitter.onError(IllegalStateException())
+                                    }
+                                }
+                            }
                 }
                 .subscribeOn(Schedulers.io())
-                .subscribe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { location, _ ->
+                    if (location != null) {
+                        viewModel.updateLocation(location)
+                    } else {
+                        Toast.makeText(applicationContext, "Problems occurred", Toast.LENGTH_SHORT).show()
+                    }
+                }
     }
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
