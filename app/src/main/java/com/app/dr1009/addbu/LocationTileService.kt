@@ -62,7 +62,8 @@ class LocationTileService : TileService() {
         }
     }
 
-    private fun showNotification(location: Location) {
+    private fun showNotification(location: Location?) {
+        if (location == null) return
         val address = Geocoder(applicationContext).getFromLocation(location.latitude, location.longitude, 1).first()
 
         val text = address.getAddressLine(0)
