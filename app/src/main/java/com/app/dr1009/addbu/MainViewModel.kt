@@ -24,18 +24,25 @@ THE SOFTWARE.
 package com.app.dr1009.addbu
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.databinding.ObservableField
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.util.Log
-import io.reactivex.Completable
-import io.reactivex.schedulers.Schedulers
-import java.io.IOException
+import androidx.databinding.ObservableField
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(application: Application) : AndroidViewModel(application), CoroutineScope {
+
+    private val job = SupervisorJob()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
+    override fun onCleared() {
+        super.onCleared()
+        coroutineContext.cancelChildren()
+    }
 
     var latitude = ObservableField("0.0")
         set (value) {
@@ -68,23 +75,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateAddress() {
-        Completable
-                .create {
-                    try {
-                        val list = Geocoder(getApplication()).getFromLocation(latitude.get()!!.toDouble(), longitude.get()!!.toDouble(), 1)
-                        address.postValue(if (list.isEmpty()) {
-                            null
-                        } else {
-                            list.first()
-                        })
-                    } catch (e: IOException) {
-                        Log.e("MainViewModel", "updateAddress: ", e)
-                    } finally {
-                        it.onComplete()
-                    }
-                }
-                .observeOn(Schedulers.computation())
-                .subscribe()
+        val lat = latitude.get() ?: return
+        val lon = longitude.get() ?: return
 
+        launch {
+            runCatching {
+                Geocoder(getApplication()).getFromLocation(lat.toDouble(), lon.toDouble(), 1)
+            }.onSuccess {
+                address.postValue(if (it.isEmpty()) {
+                    null
+                } else {
+                    it.first()
+                })
+            }
+        }
     }
 }
