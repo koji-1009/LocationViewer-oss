@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by lazy { ViewModelProviders.of(this@MainActivity).get(MainViewModel::class.java) }
     private val binding: ActivityMainBinding by lazy {
         DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main).also {
-            it.setLifecycleOwner(this@MainActivity)
+            it.lifecycleOwner = this@MainActivity
             it.viewModel = viewModel
         }
     }
