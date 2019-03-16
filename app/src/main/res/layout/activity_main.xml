@@ -18,8 +18,6 @@
         android:focusableInTouchMode="true"
         tools:context="com.app.dr1009.addbu.MainActivity">
 
-        <requestFocus />
-
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="0dp"

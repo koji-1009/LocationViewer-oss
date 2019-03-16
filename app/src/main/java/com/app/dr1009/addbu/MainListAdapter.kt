@@ -96,7 +96,7 @@ class MainListAdapter : ListAdapter<MainListAdapter.Item, MainListAdapter.ViewHo
         submitList(list)
     }
 
-    inner class ViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val binding: ViewDataBinding? = DataBindingUtil.bind(view)
         fun bindTo(item: Item) {
