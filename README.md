@@ -16,7 +16,7 @@ To use the Location Viewer without building on your PC, please check the link be
 [Store](https://play.google.com/store/apps/details?id=com.app.dr1009.addbu)
 
 ### Notice
-Store version (Location Viewer, not Location Viewer oss) includes advertisements and so on.
+Store version (Location Viewer, not Location Viewer oss) includes Firebase Analytics and Crashlytics.
 
 ## Licence
 
