@@ -34,14 +34,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-class MainListAdapter : ListAdapter<MainListAdapter.Item, MainListAdapter.ViewHolder>(DIFF_CALLBACK) {
-
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Item>() {
-            override fun areItemsTheSame(oldItem: Item, newItem: Item) = oldItem == newItem
+class MainListAdapter : ListAdapter<MainListAdapter.Item, MainListAdapter.ViewHolder>(
+        object : DiffUtil.ItemCallback<Item>() {
+            override fun areItemsTheSame(oldItem: Item, newItem: Item) = oldItem.title == newItem.title
             override fun areContentsTheSame(oldItem: Item, newItem: Item) = oldItem == newItem
-        }
-    }
+        }) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_main, parent, false))
@@ -99,6 +96,7 @@ class MainListAdapter : ListAdapter<MainListAdapter.Item, MainListAdapter.ViewHo
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val binding: ViewDataBinding? = DataBindingUtil.bind(view)
+
         fun bindTo(item: Item) {
             binding?.run {
                 setVariable(BR.item, item)
