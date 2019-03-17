@@ -22,4 +22,7 @@
     <string name="premises" translatable="false">Premises</string>
     <string name="postal_code" translatable="false">Postal code</string>
 
+    <!-- Notification Channel -->
+    <string name="notification_tile_title">Tile Service</string>
+    <string name="notification_tile_description">Show your location when tap Tile item</string>
 </resources>

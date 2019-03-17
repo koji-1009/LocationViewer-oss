@@ -42,10 +42,6 @@ import com.google.android.gms.location.LocationServices
 @RequiresApi(Build.VERSION_CODES.N)
 class LocationTileService : TileService() {
 
-    companion object {
-        private const val NOTIFICATION_ID = 1111
-    }
-
     override fun onClick() {
         super.onClick()
 
@@ -79,7 +75,7 @@ class LocationTileService : TileService() {
         }
         val resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val builder = NotificationCompat.Builder(applicationContext, "main")
+        val builder = NotificationCompat.Builder(applicationContext, NotificationChannelList.TILE_SERVICE.channelId)
                 .setSmallIcon(R.drawable.ic_my_location_black_24dp)
                 .setContentTitle(getString(R.string.notification_title))
                 .setContentText(text)
@@ -87,5 +83,9 @@ class LocationTileService : TileService() {
                 .setAutoCancel(true)
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.notify(NOTIFICATION_ID, builder.build())
+    }
+
+    companion object {
+        private const val NOTIFICATION_ID = 1111
     }
 }

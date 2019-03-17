@@ -5,4 +5,8 @@
     <string name="notification_title">現在地</string>
     <string name="hint_latitude">緯度</string>
     <string name="hint_longitude">経度</string>
+
+    <!-- Notification Channel -->
+    <string name="notification_tile_title">タイルサービス通知</string>
+    <string name="notification_tile_description">タイル上のアイテムタップ時に表示されます</string>
 </resources>
